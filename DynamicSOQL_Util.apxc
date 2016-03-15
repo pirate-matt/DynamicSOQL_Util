@@ -1,0 +1,13 @@
+/*
+ * @author pirate-matt
+ * @date   March, 2016
+ *
+ * @description  Utility class that has some convenient utility methods when dealing with dynamic SOQL
+ * */
+public class DynamicSOQL_Util {
+
+    Static  public String encode(Datetime providedDatetime) {
+        return providedDatetime.format('yyyy-MM-dd\'T\'hh:mm:ss\'Z\'');
+    }
+
+}

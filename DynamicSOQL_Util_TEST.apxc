@@ -1,0 +1,21 @@
+/*
+ * @author pirate-matt
+ * @date   March, 2016
+ *
+ * @description  Test class for similarly named utilty class
+ * */
+
+@isTest
+public class DynamicSOQL_Util_TEST {
+
+
+    Static  testMethod void testDatetimeEncodes() {
+        Long known_ms = 1458004415984L;
+        Datetime known = Datetime.newInstance(known_ms);
+        String expectedFormat = '2016-03-14T06:13:35Z';
+
+        Test.startTest();
+        System.assertEquals(expectedFormat, DynamicSOQL_Util.encode(known));
+        Test.stopTest();
+    }
+}
