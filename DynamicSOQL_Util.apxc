@@ -6,8 +6,21 @@
  * */
 public class DynamicSOQL_Util {
 
-    Static  public String encode(Datetime providedDatetime) {
+    Static public String encode(Datetime providedDatetime) {
         return providedDatetime.format('yyyy-MM-dd\'T\'hh:mm:ss\'Z\'');
+        //return providedDatetime.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'');
+    }
+
+    Static public STring encodeAsDate(Datetime providedDatetime) {
+        return providedDatetime.format('yyyy-MM-dd');
+    }
+
+    Static public String encode(Date providedDate) {
+        return DynamicSOQL_Util.encodeAsDate(Datetime.newInstance(providedDate, Time.newInstance(0, 0, 0, 0)));
+    }
+
+    Static public String encodeAsDatetime(Date providedDate) {
+        return DynamicSOQL_Util.encode(Datetime.newInstance(providedDate, Time.newInstance(0, 0, 0, 0)));
     }
 
 }
