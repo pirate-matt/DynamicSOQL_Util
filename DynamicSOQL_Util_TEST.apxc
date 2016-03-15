@@ -10,12 +10,35 @@ public class DynamicSOQL_Util_TEST {
 
 
     Static  testMethod void testDatetimeEncodes() {
-        Long known_ms = 1458004415984L;
-        Datetime known = Datetime.newInstance(known_ms);
-        String expectedFormat = '2016-03-14T06:13:35Z';
+        Datetime before_insertion = Datetime.now();
+        Date knownDate = Date.newInstance(2016, 3, 14);
+
+        Contact knownContact = new Contact(
+            LastName = 'known',
+            BirthDate = knownDate
+        );
+        insert knownContact;
+
+        // Fetch from database to get a known Datetime (CreatedDate)
+        knownContact = [SELECT Id, BirthDate, CreatedDate
+                        FROM Contact
+                        WHERE Id = :knownContact.Id
+                        LIMIT 1];
+
+        Datetime knownDatetime = knownContact.CreatedDate;
+
+        String baseClause = 'SELECT Id, BirthDate, CreatedDate  FROM Contact  ';
 
         Test.startTest();
-        System.assertEquals(expectedFormat, DynamicSOQL_Util.encode(known));
+        Contact foundByDate = Database.query(baseClause + 'WHERE BirthDate = ' + DynamicSOQL_Util.encode(knownDate) + ' LIMIT 1');
+        System.assertNotEquals(null, foundByDate, 'Should have been able to locate contact by encoded Date');
+
+        Contact foundByDatetime = Database.query(baseClause + ' WHERE CreatedDate >= ' + DynamicSOQL_Util.encode(before_insertion) + ' LIMIT 1');
+        System.assertNotEquals(null, foundByDatetime, 'Should have been able to locate contact by encoded Datetime "now"');
+        System.assertEquals(knownDatetime, foundByDatetime.CreatedDate, 'Found CreatedDate should have matched known datetime');
+
+        Contact foundByDateEncodedAsDatetime = Database.query(baseClause + ' WHERE CreatedDate >= ' + DynamicSOQL_Util.encodeAsDatetime(Date.today()) + ' LIMIT 1');
+        System.assertNotEquals(null, foundByDateEncodedAsDatetime, 'Should have been able to locate contact by Date encoded for Datetime field (CreatedDate)');
         Test.stopTest();
     }
 }
