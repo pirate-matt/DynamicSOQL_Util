@@ -9,6 +9,34 @@
 public class DynamicSOQL_Util_TEST {
 
 
+    Static testMethod void testStringEncodes() {
+        List<String> emptyList = new List<String>();
+        Set<String>  emptySet  = new Set<String>();
+
+        List<String> knownList = new List<String>{'Name', 'CreatedDate', 'OwnerId'};
+        Set<String>  knownSet  = new Set<String> {'Name', 'CreatedDate', 'OwnerId'};
+
+        String expectedSelectClauseStart = 'SELECT ';
+        String expectedFieldNameString   = 'Name,CreatedDate,OwnerId';
+
+        Test.startTest();
+        // Test empty collections
+        System.assertEquals('', DynamicSOQL_Util.prepFieldNamesForSelectClause(emptyList));
+        System.assertEquals('', DynamicSOQL_Util.prepFieldNamesForSelectClause(emptySet) );
+        System.assertEquals(expectedSelectClauseStart, DynamicSOQL_Util.formSelectClause(emptyList));
+        System.assertEquals(expectedSelectClauseStart, DynamicSOQL_Util.formSelectClause(emptySet) );
+
+        // Test non empty collections
+        System.assertEquals(expectedFieldNameString, DynamicSOQL_Util.prepFieldNamesForSelectClause(knownList));
+        System.assertEquals(expectedFieldNameString, DynamicSOQL_Util.prepFieldNamesForSelectClause(knownSet) );
+        System.assertEquals(expectedSelectClauseStart + expectedFieldNameString, DynamicSOQL_Util.formSelectClause(knownList));
+        System.assertEquals(expectedSelectClauseStart + expectedFieldNameString, DynamicSOQL_Util.formSelectClause(knownSet) );
+        Test.stopTest();
+    }
+
+
+
+
     Static  testMethod void testDatetimeEncodes() {
         Datetime before_insertion = Datetime.now();
         Date knownDate = Date.newInstance(2016, 3, 14);
