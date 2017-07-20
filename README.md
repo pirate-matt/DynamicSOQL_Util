@@ -11,6 +11,7 @@ Okay so this is a large structural change, but not an overly large content chang
 * Made comments less verbose
 * Added input sanitization using `String.escapeSingleQuotes( .. )` as recommended by the [docs](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_dynamic_soql.htm?search_text=dynamic%20soql).
 * Added List/Set `encode` support.
+* Added String `encode` support - _(wrapping in escaped single quotes)._
 
 
 ### @FUTURE

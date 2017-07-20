@@ -62,7 +62,17 @@ public class Pirate_Util_SOQL {
     // (these methods return properly encoded strings for the various data types)
     // (Mostly convenience methods, with a few workhorse methods)
 
-    
+
+    // ---------------- String ----------------
+
+    /*
+     * @description For dynamic soql, strings must be wrapped in escaped single quotes
+     * */
+    static public String encode ( String providedString ) {
+        return '\'' + String.escapeSingleQuotes( providedString ) + '\'';
+    }
+
+
     // ---------------- DATETIME ----------------
 
     /*
@@ -79,7 +89,7 @@ public class Pirate_Util_SOQL {
         return providedDatetime.format( 'yyyy-MM-dd' );
     }
 
-    
+
     // ---------------- DATE ----------------
 
     /*
@@ -90,38 +100,38 @@ public class Pirate_Util_SOQL {
     }
 
     /*
-     * @description  Accepts Date objects, and returns an encoded string for a representative datetime object.  NOTE representative 
+     * @description  Accepts Date objects, and returns an encoded string for a representative datetime object.  NOTE representative
      *               datetime object is considered of the same date at the very start of the day 00:00:00.
      * */
     static public String encodeAsDatetime ( Date providedDate ) {
         return encode( Datetime.newInstance( providedDate, DAYS_START_TIME ) );
     }
 
-    
+
     // ---------------- LISTS ----------------
     // (Note )
-    
+
     /*
      * @description Convenience method that accepts a Set, rather than a List.
      * */
     static public String encode ( Set<Object> providedSet ) {
         return encode( new List<Object>( providedSet ) );
     }
-    
+
     /*
      * @description Converts the provided list of Objects into the format required by dynamic soql.
-     * 
-     *              NOTE: this method is typically called with Ids or Strings, as each object must be converted to a String for both 
+     *
+     *              NOTE: this method is typically called with Ids or Strings, as each object must be converted to a String for both
      *                    sanitization and dynamic SOQL. Using other object types may experience unexpected results.
      * */
     static public String encode ( List<Object> providedList ) {
         List<String> convertedAndSanitized = new List<String>();
-        
+
         for ( Object obj : providedList ) {
             String converted = String.valueOf( obj );
             convertedAndSanitized.add( String.escapeSingleQuotes( converted ) );
         }
-        
+
         return '(\'' + String.join( convertedAndSanitized, '\',\'' ) + '\')';
     }
 

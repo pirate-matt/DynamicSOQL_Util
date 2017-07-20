@@ -9,7 +9,7 @@
 public class Pirate_Util_SOQL_TEST {
 
 
-    static testMethod void testStringEncodes() {
+    static testMethod void testSelectClauseFormers() {
         List<String> emptyList = new List<String>();
         Set<String>  emptySet = new Set<String>();
 
@@ -31,6 +31,13 @@ public class Pirate_Util_SOQL_TEST {
         System.assertEquals( expectedFieldNameString, Pirate_Util_SOQL.prepFieldNamesForSelectClause( knownSet ) );
         System.assertEquals( expectedSelectClauseStart + expectedFieldNameString, Pirate_Util_SOQL.formSelectClause( knownList ) );
         System.assertEquals( expectedSelectClauseStart + expectedFieldNameString, Pirate_Util_SOQL.formSelectClause( knownSet ) );
+        Test.stopTest();
+    }
+
+
+    static testMethod void testStringEncodes() {
+        Test.startTest();
+        System.assertEquals( '\'wrap with escaped single quotes\'', Pirate_Util_SOQL.encode( 'wrap with escaped single quotes' ) );
         Test.stopTest();
     }
 
@@ -67,22 +74,22 @@ public class Pirate_Util_SOQL_TEST {
         System.assertNotEquals( null, foundByDateEncodedAsDatetime, 'Should have been able to locate contact by Date encoded for Datetime field (CreatedDate)' );
         Test.stopTest();
     }
-    
-    
+
+
     static testMethod void testSetAndListEncodes() {
         // Setup Knowns and Expecteds
         Set<Object> knownSet = new Set<Object>{ 'Indianapolis', 'San Fran', 'Pittsburgh' };
         List<Object> knownList = new List<Object>{ 'Indianapolis', 'San Fran', 'Pittsburgh' };
-            
+
         String expectedResult = '(\'Indianapolis\',\'San Fran\',\'Pittsburgh\')';
-        
+
         // Run Tests
         Test.startTest();
         String result;
-        
+
         result = Pirate_Util_SOQL.encode( knownList );
         System.assertEquals(result, expectedResult);
-        
+
         // can't gurarentee order
         result = Pirate_Util_SOQL.encode( knownSet );
         System.assertEquals( result.startsWith( '(' ), true, 'Result should have started with an open paren.' );
